@@ -57,7 +57,9 @@ section{padding:48px 0}
 .intake dd.role{font-size:17px;font-weight:500}
 .intake .pw{font-size:16px}
 .ldr-ctl{font:500 13px var(--font);color:var(--inverse-muted);background:none;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:5px 12px;cursor:pointer}
-.ldr-ctl:hover{color:#fff;border-color:#fff}
+.ldr-ctl:hover:not(:disabled){color:#fff;border-color:#fff}
+.ldr-ctl:disabled{opacity:.4;cursor:default}
+.ldr-ctls{display:flex;gap:8px}
 
 /* logo animation (from "Logo colouring loader – wave", caption removed) */
 .ldr{--size:68px;--grey:#4A4C54;--name-off:#7C808A;--sticker:#fff;position:relative;width:100%;aspect-ratio:520/240;overflow:hidden;color:#fff}
@@ -239,7 +241,7 @@ dialog .close{position:absolute;top:8px;right:8px}
 
 <div class="hero">
   <div class="anim-col">
-    <div class="ldr" id="ldr" role="img" aria-label="Animation: a small illustrated Qian runs past four grey logos labelled Mentor Collective, USDA, Veterans Affairs and Think of Us, and jumps to tap each one into full colour. At Think of Us she stops, turns to face you and waves.">
+    <div class="ldr" id="ldr" role="img" aria-label="Animation: a small illustrated Qian runs past four grey logos labelled Mentor Collective, USDA, Veterans Affairs and Think of Us, and jumps to tap each one into full colour. At Think of Us she stops, turns to face you and waves, then stays there waving hello.">
       <div class="stage" id="ldrStage" aria-hidden="true">
       <div class="logo mc" style="left:80px;--tilt:-7deg"><span class="lname">Mentor Collective</span><div class="grey"><img data-l="mc" alt=""></div><div class="col"><img data-l="mc" alt=""></div></div>
       <div class="logo usda" style="left:200px;--tilt:5deg"><span class="lname">USDA</span><div class="grey"><img data-l="usda" alt=""></div><div class="col"><img data-l="usda" alt=""></div></div>
@@ -309,7 +311,10 @@ dialog .close{position:absolute;top:8px;right:8px}
       </div>
       </div>
     </div>
-    <button class="ldr-ctl" id="ldrToggle" type="button" aria-pressed="false">Pause animation</button>
+    <div class="ldr-ctls" role="group" aria-label="Animation controls">
+      <button class="ldr-ctl" id="ldrPlay" type="button" aria-label="Play animation"><span aria-hidden="true">▶</span> <span class="lbl">Play</span></button>
+      <button class="ldr-ctl" id="ldrPause" type="button" aria-label="Pause animation"><span aria-hidden="true">❚❚</span> Pause</button>
+    </div>
   </div>
   <aside class="intake" aria-label="Application summary">
     <span class="label">Application for Think of Us</span>
@@ -561,8 +566,7 @@ dialog .close{position:absolute;top:8px;right:8px}
   var W=520, LOGO_X=[80,200,320,440], JUMP=34, JUMP_T=0.52, SPEED=132, START=-50;
   var hitT=LOGO_X.map(function(x){return (x-8-START)/SPEED;});
   var LAND=hitT[3]+JUMP_T/2, LAND_X=START+LAND*SPEED, DEC=0.14, STOP_X=LAND_X+SPEED*DEC/2;
-  var TURN_D=0.32, TURN1=LAND+DEC+0.1, WAVE0=TURN1+TURN_D, WAVE1=WAVE0+2.1, TURN2=WAVE1+0.05, RUN2=TURN2+TURN_D;
-  var EXIT_T=RUN2+(W+50-STOP_X)/SPEED, RESET=EXIT_T+0.15, TOTAL=RESET+0.8;
+  var TURN_D=0.32, TURN1=LAND+DEC+0.1, WAVE0=TURN1+TURN_D, WAVE_D=3.6, END=WAVE0+WAVE_D;
   var root=document.getElementById('ldr'), stage=document.getElementById('ldrStage');
   [].forEach.call(stage.querySelectorAll('img[data-l]'),function(im){im.src=LOGOS[im.dataset.l];});
   var runner=document.getElementById('ldrRunner'), shadow=document.getElementById('ldrShadow');
@@ -572,9 +576,16 @@ dialog .close{position:absolute;top:8px;right:8px}
   function fit(){stage.style.transform='scale('+root.clientWidth/W+')';}
   fit(); addEventListener('resize',fit);
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var wanted=!reduce, visible=true, running=false, t0=null, tP=0, raf;
-  function setLogo(l,s){l.classList.toggle('on',s==='on');l.classList.toggle('reset',s==='reset');}
-  function waveAngle(t){if(t<WAVE0||t>WAVE1)return 0;var k=Math.min((t-WAVE0)/.18,(WAVE1-t)/.18,1);k=k*k*(3-2*k);return k*(-146+18*Math.sin((t-WAVE0)/0.42*2*Math.PI));}
+  // plays once on its own; Play resumes or replays, Pause stops it where it is
+  var wanted=!reduce, visible=false, running=false, done=false, t0=null, tP=0, raf;
+  var playBtn=document.getElementById('ldrPlay'), pauseBtn=document.getElementById('ldrPause');
+  function setLogo(l,on){l.classList.toggle('on',on);l.classList.remove('reset');}
+  function waveAngle(t){
+    if(t<WAVE0)return 0;
+    var up=Math.min((t-WAVE0)/.18,1); up=up*up*(3-2*up);
+    var amp=18*Math.max(0,Math.min(1,(END-t)/0.6)); // the wave slows and settles with her hand up
+    return up*(-146+amp*Math.sin((t-WAVE0)/0.42*2*Math.PI));
+  }
   function draw(x,y,mode,sx,isFront,a){
     runner.style.transform='translate('+x.toFixed(2)+'px,'+y.toFixed(2)+'px)';
     runner.className='runner'+(mode?' '+mode:'');
@@ -583,35 +594,48 @@ dialog .close{position:absolute;top:8px;right:8px}
     arm.setAttribute('transform','rotate('+a.toFixed(2)+' 51 52)');
     var s=1+y/90; shadow.style.transform='translate('+x.toFixed(2)+'px,0) scale('+s.toFixed(3)+')'; shadow.style.opacity=s;
   }
-  function frame(now){
-    if(t0===null)t0=now-tP*1000;
-    var t=((now-t0)/1000)%TOTAL; tP=t;
+  function render(t){
     var x,y=0,mode='',sx=1,isFront=false,jumping=false;
-    if(t<LAND)x=START+t*SPEED; else if(t<LAND+DEC){var d=t-LAND;x=LAND_X+SPEED*(d-d*d/(2*DEC));} else if(t<RUN2)x=STOP_X; else x=STOP_X+SPEED*(t-RUN2);
+    if(t<LAND)x=START+t*SPEED; else if(t<LAND+DEC){var d=t-LAND;x=LAND_X+SPEED*(d-d*d/(2*DEC));} else x=STOP_X;
     for(var i=0;i<hitT.length;i++){
       var p=(t-(hitT[i]-JUMP_T/2))/JUMP_T; if(p>0&&p<1){y=-JUMP*4*p*(1-p);jumping=true;}
-      var since=t-hitT[i]; setLogo(logos[i],t>=RESET?'reset':(since>=0?'on':''));
+      var since=t-hitT[i]; setLogo(logos[i],since>=0);
       var k=since>=0&&since<.28?Math.sin(since/.28*Math.PI)*-9:0; logos[i].style.transform='translateY('+k.toFixed(2)+'px)';
     }
-    if(jumping)mode='jumping'; else if(t<LAND+DEC||t>=RUN2)mode='running';
+    if(jumping)mode='jumping'; else if(t<LAND+DEC)mode='running';
     if(t>=TURN1&&t<WAVE0){var q=(t-TURN1)/TURN_D;sx=Math.max(Math.abs(Math.cos(Math.PI*q)),.04);isFront=q>=.5;y=-6*Math.sin(Math.PI*q);}
-    else if(t>=WAVE0&&t<TURN2)isFront=true;
-    else if(t>=TURN2&&t<RUN2){var q2=(t-TURN2)/TURN_D;sx=Math.max(Math.abs(Math.cos(Math.PI*q2)),.04);isFront=q2<.5;y=-6*Math.sin(Math.PI*q2);}
+    else if(t>=WAVE0)isFront=true;
     draw(x,y,mode,sx,isFront,waveAngle(t));
+  }
+  function frame(now){
+    if(t0===null)t0=now-tP*1000;
+    var t=Math.min((now-t0)/1000,END); tP=t;
+    render(t);
+    if(t>=END){done=true;wanted=false;running=false;ui();return;}
     if(running)raf=requestAnimationFrame(frame);
   }
-  function still(){logos.forEach(function(l){setLogo(l,'on');l.style.transform='';});draw(STOP_X,0,'',1,true,-146);}
   function sync(){
-    var go=wanted&&visible;
+    var go=wanted&&visible&&!done;
     if(go&&!running){running=true;t0=null;raf=requestAnimationFrame(frame);}
     if(!go&&running){running=false;cancelAnimationFrame(raf);runner.classList.remove('running','jumping');}
-    btn.textContent=wanted?'Pause animation':'Play animation'; btn.setAttribute('aria-pressed',String(!wanted));
+    ui();
   }
-  var btn=document.getElementById('ldrToggle');
-  btn.addEventListener('click',function(){wanted=!wanted;sync();});
+  function ui(){
+    var playing=wanted&&!done;
+    playBtn.disabled=playing; pauseBtn.disabled=!playing;
+    playBtn.querySelector('.lbl').textContent=done?'Replay':'Play';
+    playBtn.setAttribute('aria-label',(done?'Replay':'Play')+' animation');
+  }
+  playBtn.addEventListener('click',function(){
+    if(done){done=false;tP=0;}
+    wanted=true; sync(); pauseBtn.focus();
+  });
+  pauseBtn.addEventListener('click',function(){wanted=false; sync(); playBtn.focus();});
   if('IntersectionObserver' in window) new IntersectionObserver(function(es){visible=es[0].isIntersecting;sync();}).observe(root);
-  if(reduce) still(); sync();
-  window.__seek=function(t){wanted=false;sync();t0=null;tP=t;running=false;frame(performance.now());};
+  else visible=true;
+  if(reduce){tP=END;done=true;render(END);} else render(0);
+  sync();
+  window.__seek=function(t){wanted=false;sync();tP=t;render(t);};
 })();
 </script>
 </body>
