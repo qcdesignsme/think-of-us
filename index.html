@@ -56,10 +56,14 @@ section{padding:48px 0}
 .intake dd{margin:0;font-size:15px}
 .intake dd.role{font-size:17px;font-weight:500}
 .intake .pw{font-size:16px}
-.ldr-ctl{font:500 13px var(--font);color:var(--inverse-muted);background:none;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:5px 12px;cursor:pointer}
-.ldr-ctl:hover:not(:disabled){color:#fff;border-color:#fff}
-.ldr-ctl:disabled{opacity:.4;cursor:default}
 .ldr-ctls{display:flex;gap:8px}
+/* 32px round icon buttons: above the 24px WCAG 2.5.8 target minimum; icon #C9CDD3 on #212227 is ~10:1 */
+.ldr-ctl{width:32px;height:32px;padding:0;border-radius:50%;display:grid;place-items:center;color:var(--inverse-muted);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.24);cursor:pointer;transition:color .15s,border-color .15s,background .15s}
+.ldr-ctl svg{width:14px;height:14px;fill:currentColor;display:block}
+.ldr-ctl svg[hidden]{display:none}
+.ldr-ctl:hover:not(:disabled){color:#fff;border-color:#fff;background:rgba(255,255,255,.12)}
+.ldr-ctl:focus-visible{outline:3px solid #8FA4B8;outline-offset:2px;border-radius:50%}
+.ldr-ctl:disabled{opacity:.35;cursor:default}
 
 /* logo animation (from "Logo colouring loader – wave", caption removed) */
 .ldr{--size:68px;--grey:#4A4C54;--name-off:#7C808A;--sticker:#fff;position:relative;width:100%;aspect-ratio:520/240;overflow:hidden;color:#fff}
@@ -312,8 +316,13 @@ dialog .close{position:absolute;top:8px;right:8px}
       </div>
     </div>
     <div class="ldr-ctls" role="group" aria-label="Animation controls">
-      <button class="ldr-ctl" id="ldrPlay" type="button" aria-label="Play animation"><span aria-hidden="true">▶</span> <span class="lbl">Play</span></button>
-      <button class="ldr-ctl" id="ldrPause" type="button" aria-label="Pause animation"><span aria-hidden="true">❚❚</span> Pause</button>
+      <button class="ldr-ctl" id="ldrPlay" type="button" aria-label="Play animation" title="Play">
+        <svg class="i-play" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6l7.6-4.8z"/></svg>
+        <svg class="i-replay" viewBox="0 0 16 16" aria-hidden="true" focusable="false" hidden><path d="M8 2.6V.6L4.4 3.6 8 6.6v-2a3.6 3.6 0 1 1-3.6 3.6H2.6A5.4 5.4 0 1 0 8 2.6z"/></svg>
+      </button>
+      <button class="ldr-ctl" id="ldrPause" type="button" aria-label="Pause animation" title="Pause">
+        <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4.4 3h2.6v10H4.4zM9 3h2.6v10H9z"/></svg>
+      </button>
     </div>
   </div>
   <aside class="intake" aria-label="Application summary">
@@ -623,7 +632,7 @@ dialog .close{position:absolute;top:8px;right:8px}
   function ui(){
     var playing=wanted&&!done;
     playBtn.disabled=playing; pauseBtn.disabled=!playing;
-    playBtn.querySelector('.lbl').textContent=done?'Replay':'Play';
+    playBtn.querySelector('.i-play').toggleAttribute('hidden',done); playBtn.querySelector('.i-replay').toggleAttribute('hidden',!done); playBtn.title=done?'Replay':'Play';
     playBtn.setAttribute('aria-label',(done?'Replay':'Play')+' animation');
   }
   playBtn.addEventListener('click',function(){
