@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Logo colouring loader</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#212227;color:#fff;display:grid;place-items:center;transition:background .3s,color .3s}
+body.light{background:#F3F4F5;color:#1D2C38}
+.wrap{display:grid;gap:28px;justify-items:center;padding:24px;width:100%}
+
+/* ---------- the component ---------- */
+.loader{--size:68px;--ground:rgba(255,255,255,.18);--grey:#4A4C54;--name-off:#6A6D76;--sticker:#fff;
+  position:relative;width:min(520px,100%);aspect-ratio:520/276;overflow:hidden}
+.light .loader{--ground:rgba(29,44,56,.16);--grey:#D4D7DB;--name-off:#A9AEB5}
+.stage{position:absolute;left:0;top:0;width:520px;height:276px;transform-origin:0 0}
+.logo{position:absolute;top:40px;width:var(--size);height:var(--size);margin-left:calc(var(--size)/-2);border-radius:50%;will-change:transform}
+.logo .grey,.logo .col{position:absolute;inset:0;border-radius:50%}
+.logo .grey{background:var(--grey);overflow:hidden}
+.logo .grey img{width:100%;height:100%;display:block;filter:grayscale(1) contrast(.35);opacity:.22;mix-blend-mode:luminosity}
+.logo .col{opacity:0;transform:scale(.6);box-shadow:0 0 0 3px var(--sticker),0 6px 14px rgba(0,0,0,.28);background:var(--sticker)}
+.logo .col img{width:100%;height:100%;display:block;border-radius:50%}
+.logo.us .col{background:#fff}
+.name{position:absolute;left:50%;bottom:calc(100% + 10px);transform:translateX(-50%);white-space:nowrap;font-size:12px;font-weight:700;letter-spacing:.01em;color:var(--name-off);transition:color .5s}
+.logo.on .name{color:inherit;transition:color .15s;animation:namePop .45s cubic-bezier(.3,1.9,.5,1)}
+@keyframes namePop{0%{transform:translateX(-50%) scale(.8)}100%{transform:translateX(-50%) scale(1)}}
+.logo.on .grey{opacity:0;transition:opacity .18s}
+.logo.on .col{opacity:1;transform:scale(1) rotate(var(--tilt,0deg));transition:opacity .12s,transform .45s cubic-bezier(.3,1.9,.5,1)}
+.logo.reset .grey{opacity:1;transition:opacity .5s}
+.logo.reset .col{opacity:0;transform:scale(.9);transition:opacity .5s,transform .5s}
+.spark{position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px;border-radius:50%;background:#FFD166;opacity:0;pointer-events:none}
+.logo.on .spark{animation:spark .5s ease-out both}
+@keyframes spark{0%{opacity:1;transform:rotate(var(--a)) translateY(-30px) scale(1)}100%{opacity:0;transform:rotate(var(--a)) translateY(-56px) scale(.3)}}
+.ground{position:absolute;left:16px;right:16px;top:230px;height:2px;border-radius:2px;background:var(--ground)}
+.caption{position:absolute;left:0;right:0;top:244px;text-align:center;font-size:14px;font-weight:700;letter-spacing:.01em}
+.shadow{position:absolute;top:226px;left:0;width:34px;height:8px;margin-left:-17px;border-radius:50%;background:rgba(0,0,0,.35)}
+.light .shadow{background:rgba(29,44,56,.18)}
+.runner{position:absolute;left:0;top:134px;width:72px;height:99px;margin-left:-36px;will-change:transform}
+.runner svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 1px rgba(255,255,255,.45))}
+.light .runner svg{filter:none}
+
+/* limbs */
+.leg,.arm,.hair-back{transform-box:fill-box}
+.leg{transform-origin:50% 6%}
+.arm{transform-origin:50% 10%}
+.hair-back{transform-origin:60% 0}
+.running .leg.a{animation:swing .34s ease-in-out infinite alternate}
+.running .leg.b{animation:swing .34s ease-in-out infinite alternate-reverse}
+.running .arm.a{animation:swingArm .34s ease-in-out infinite alternate-reverse}
+.running .arm.b{animation:swingArm .34s ease-in-out infinite alternate}
+.running .hair-back{animation:hair .34s ease-in-out infinite alternate}
+.running .bob{animation:bob .17s ease-in-out infinite alternate}
+@keyframes swing{from{transform:rotate(34deg)}to{transform:rotate(-34deg)}}
+@keyframes swingArm{from{transform:rotate(40deg)}to{transform:rotate(-40deg)}}
+@keyframes hair{from{transform:rotate(4deg)}to{transform:rotate(12deg)}}
+@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-2px)}}
+.jumping .leg.a{animation:none;transform:rotate(-48deg)}
+.jumping .leg.b{animation:none;transform:rotate(30deg)}
+.jumping .arm.a{animation:none;transform:rotate(38deg)}
+.jumping .arm.b{animation:none;transform:translate(9px,-25px) rotate(-172deg)}
+.jumping .hair-back{animation:none;transform:rotate(-4deg)}
+.jumping .bob{animation:none}
+
+.controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+button{font:500 14px 'DM Sans',system-ui,sans-serif;padding:9px 16px;border-radius:999px;border:1px solid currentColor;background:transparent;color:inherit;cursor:pointer;opacity:.8}
+button:hover{opacity:1}
+button:focus-visible{outline:2px solid #7FB2FF;outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="loader" id="loader" role="img" aria-label="Animation: a character who looks like Qian runs past four grey logos labelled Mentor Collective, USDA, Veterans Affairs and Think of Us, and jumps to tap each logo and its name into full colour. Caption: Designing for systemic change.">
+    <div class="stage" id="stage" aria-hidden="true">
+      <div class="logo mc" style="left:80px;--tilt:-7deg"><span class="name">Mentor Collective</span><div class="grey"><img src="{{mc}}" alt=""></div><div class="col"><img src="{{mc}}" alt=""></div></div>
+      <div class="logo usda" style="left:200px;--tilt:5deg"><span class="name">USDA</span><div class="grey"><img src="{{usda}}" alt=""></div><div class="col"><img src="{{usda}}" alt=""></div></div>
+      <div class="logo va" style="left:320px;--tilt:-4deg"><span class="name">Veterans Affairs</span><div class="grey"><img src="{{va}}" alt=""></div><div class="col"><img src="{{va}}" alt=""></div></div>
+      <div class="logo us" style="left:440px;--tilt:6deg"><span class="name">Think of Us</span><div class="grey"><img src="{{us}}" alt=""></div><div class="col"><img src="{{us}}" alt=""></div></div>
+      <div class="ground"></div>
+      <div class="shadow" id="shadow"></div>
+      <div class="runner running" id="runner">
+        <svg viewBox="0 0 80 110">
+          <g class="bob">
+            <!-- long hair behind -->
+            <path class="hair-back" d="M22 22c-6 10-9 30-7 50 6 4 14 3 18-1l6-44z" fill="#3A3A42"/>
+            <!-- far arm + far leg -->
+            <g class="arm b"><rect x="33" y="50" width="10" height="25" rx="5" fill="#DAD9D4"/><circle cx="38" cy="75" r="4.2" fill="#EBC3A0"/></g>
+            <g class="leg b"><rect x="33.5" y="72" width="10" height="28" rx="5" fill="#3E4A63"/><rect x="32" y="96" width="16" height="8" rx="4" fill="#DCDCD8"/></g>
+            <!-- near leg -->
+            <g class="leg a"><rect x="35.500" y="72" width="10" height="28" rx="5" fill="#4C5A78"/><rect x="34" y="96" width="16" height="8" rx="4" fill="#fff"/></g>
+            <!-- jacket -->
+            <path d="M27 54c0-6 5-10 13-10s13 4 13 10v20c0 3-2 5-5 5H32c-3 0-5-2-5-5z" fill="#F4F3EF" stroke="#CFCEC8" stroke-width="1.2"/>
+            <path d="M40 45l6 9-4 5z" fill="#1E1E21"/>
+            <path d="M46 47l5 7-9 7M42 59v19" fill="none" stroke="#BDBCB6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M30 71h8" stroke="#BDBCB6" stroke-width="1.3" stroke-linecap="round"/>
+            <!-- head -->
+            <g>
+              <circle cx="42" cy="26" r="19" fill="#F3CFAE"/>
+              <ellipse cx="29.500" cy="30" rx="3" ry="4" fill="#EBC3A0"/>
+              <!-- hair cap, side part -->
+              <path d="M21 31c-3-15 6-27 21-27 13 0 21 8 20.500 19-6-1-15-5-21-12-3 7-9 12-14 14-2 1-3 4-3 8z" fill="#3A3A42"/>
+              <path d="M30 14c4-5 10-7 16-6" fill="none" stroke="#5A5A64" stroke-width="2" stroke-linecap="round"/>
+              <!-- square glasses -->
+              <g fill="rgba(255,255,255,.35)" stroke="#3B3B3F" stroke-width="2.600" stroke-linejoin="round">
+                <rect x="34.500" y="22" width="11.500" height="9.500" rx="2"/>
+                <rect x="50" y="22" width="10.500" height="9.500" rx="2"/>
+              </g>
+              <path d="M46 25.500h4M34.500 25l-9-1.500" stroke="#3B3B3F" stroke-width="2.400" stroke-linecap="round"/>
+              <circle cx="41" cy="27" r="1.900" fill="#2A2320"/><circle cx="55" cy="27" r="1.900" fill="#2A2320"/>
+              <path d="M44 36.500c3 3.200 8 3.200 11-.3" fill="#fff" stroke="#B5524F" stroke-width="1.800" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="36" cy="34" r="2.600" fill="#F2A99B" opacity=".55"/>
+            </g>
+            <!-- near arm -->
+            <g class="arm a"><rect x="34" y="50" width="11" height="26" rx="5.500" fill="#F4F3EF" stroke="#CFCEC8" stroke-width="1.2"/><circle cx="39.500" cy="77" r="4.500" fill="#F3CFAE"/></g>
+          </g>
+        </svg>
+      </div>
+      <div class="caption" id="caption">Designing for systemic change</div>
+    </div>
+  </div>
+  <div class="controls">
+    <button id="play" aria-pressed="false">Pause</button>
+    <button id="theme">Light background</button>
+  </div>
+</div>
+<script>
+(function(){
+  var W=520, LOGO_X=[80,200,320,440], JUMP=34, JUMP_T=0.52, SPEED=132, START=-50, END=W+50;
+  var RUN_T=(END-START)/SPEED, HOLD=1.1, FADE=0.7, TOTAL=RUN_T+HOLD+FADE;
+  var loader=document.getElementById('loader'), stage=document.getElementById('stage');
+  var runner=document.getElementById('runner'), shadow=document.getElementById('shadow');
+  var logos=[].slice.call(stage.querySelectorAll('.logo'));
+  // sparks
+  logos.forEach(function(l){for(var i=0;i<6;i++){var s=document.createElement('i');s.className='spark';s.style.setProperty('--a',(i*60+15)+'deg');l.appendChild(s);}});
+  // the moment each logo is hit = apex of a jump centred on its x
+  var hitT=LOGO_X.map(function(x){return (x-8-START)/SPEED;});
+  function fit(){stage.style.transform='scale('+loader.clientWidth/W+')';}
+  fit(); addEventListener('resize',fit);
+
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)');
+  var playing=!reduce.matches, t0=null, tPaused=0, raf;
+  function setLogo(l,state){l.classList.toggle('on',state==='on');l.classList.toggle('reset',state==='reset');}
+  function still(){ // reduced motion: everything coloured, character standing
+    logos.forEach(function(l){setLogo(l,'on');});
+    runner.className='runner';runner.style.transform='translate(26px,0)';shadow.style.transform='translate(26px,0)';
+  }
+  function frame(now){
+    if(t0===null)t0=now-tPaused*1000;
+    var t=((now-t0)/1000)%TOTAL; tPaused=t;
+    var x=START+Math.min(t,RUN_T)*SPEED, y=0, bump=-1, jumping=false;
+    for(var i=0;i<hitT.length;i++){
+      var p=(t-(hitT[i]-JUMP_T/2))/JUMP_T;
+      if(p>0&&p<1){y=-JUMP*4*p*(1-p);jumping=true;}
+      var since=t-hitT[i];
+      if(t<RUN_T+HOLD) setLogo(logos[i], since>=0?'on':'');
+      else setLogo(logos[i],'reset');
+      // little upward knock when hit
+      var k=since>=0&&since<.28?Math.sin(since/.28*Math.PI)*-9:0;
+      logos[i].style.transform='translateY('+k.toFixed(2)+'px)';
+    }
+    runner.style.transform='translate('+x.toFixed(2)+'px,'+y.toFixed(2)+'px)';
+    runner.className='runner '+(jumping?'jumping':'running');
+    var s=1+y/90; shadow.style.transform='translate('+x.toFixed(2)+'px,0) scale('+s.toFixed(3)+')'; shadow.style.opacity=s;
+    if(playing)raf=requestAnimationFrame(frame);
+  }
+  function start(){playing=true;t0=null;raf=requestAnimationFrame(frame);}
+  function stop(){playing=false;cancelAnimationFrame(raf);runner.className='runner';}
+  var btn=document.getElementById('play');
+  function sync(){btn.textContent=playing?'Pause':'Play';btn.setAttribute('aria-pressed',String(!playing));}
+  btn.onclick=function(){playing?stop():start();sync();};
+  document.getElementById('theme').onclick=function(){var l=document.body.classList.toggle('light');this.textContent=l?'Dark background':'Light background';};
+  if(playing)start();else still(); sync();
+  window.__seek=function(t){playing=false;cancelAnimationFrame(raf);t0=null;tPaused=t;frame(performance.now());};
+})();
+</script>
+</body>
+</html>

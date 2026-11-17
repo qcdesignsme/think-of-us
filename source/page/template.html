@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qian Chen for Think of Us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Tokens from the Figma file "Qian Chen for Think of Us" (Color + Spacing collections) */
+  --bg-page:#FFFFFF; --bg-hero:#212227; --bg-subtle:#F3F4F5; --bg-accent-soft:#EEF2F6; --bg-partial-soft:#FBF0E4;
+  --text:#1D2C38; --muted:#5B656C; --inverse:#FFFFFF; --inverse-muted:#C9CDD3; --partial:#A85A1A;
+  --border:#E2E4E6; --border-strong:#1D2C38; --border-partial:#E6C29E;
+  --font:"DM Sans","Helvetica Neue",Arial,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg-page);color:var(--text);font:400 16px/1.6 var(--font)}
+img{max-width:100%;display:block}
+a{color:var(--text);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:3px solid #8FA4B8;outline-offset:2px;border-radius:4px}
+.wrap{max-width:1168px;margin:0 auto;padding:0 24px}
+h1,h2,h3{margin:0;font-weight:700;text-wrap:balance}
+h2{font-size:clamp(26px,3.4vw,34px);line-height:1.15;letter-spacing:-.01em}
+h3{font-size:20px;line-height:1.25}
+p{margin:0}
+.label{font-size:14px;font-weight:500;line-height:1.4;color:var(--muted)}
+.lede{font-size:18px;color:var(--muted);max-width:64ch}
+section{padding:48px 0}
+.chapter{background:var(--bg-subtle);text-align:center;padding:20px 40px;font-size:22px;font-weight:700;line-height:1.3;margin:0 0 32px;display:inline-block}
+.sec-head{display:grid;gap:24px;margin-bottom:32px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:500 15px/1.2 var(--font);padding:12px 20px;border-radius:4px;text-decoration:none;border:1.5px solid var(--text);color:var(--text);background:transparent;cursor:pointer;white-space:nowrap}
+.btn.solid{background:var(--bg-hero);border-color:var(--bg-hero);color:#fff}
+.btn:hover{filter:brightness(1.15)}
+.btn[aria-disabled="true"]{opacity:.55;cursor:not-allowed}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* hero */
+.herowrap{background:var(--bg-hero);color:var(--inverse)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:24px 0 0}
+.top .who{font-weight:500;font-size:15px}
+.top nav{display:flex;gap:20px;flex-wrap:wrap;font-size:15px;font-weight:500}
+.top nav a{color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.35)}
+.top nav a:hover{border-color:#fff}
+.hero{padding:48px 0 64px;display:grid;grid-template-columns:minmax(0,767fr) minmax(280px,309fr);gap:24px 40px;align-items:start}
+.hero h1{grid-column:1/-1;font-size:clamp(38px,5.2vw,60px);line-height:1.1;letter-spacing:-.02em;color:#fff}
+.anim-col{display:grid;gap:10px;justify-items:start}
+.intake{background:#fff;color:var(--text);border-radius:8px;padding:24px 22px;display:grid;gap:14px}
+.intake dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:10px 28px;align-items:baseline}
+.intake dt{font-size:14px;font-weight:500;color:var(--muted)}
+.intake dd{margin:0;font-size:15px}
+.intake dd.role{font-size:17px;font-weight:500}
+.intake .pw{font-size:16px}
+.ldr-ctls{display:flex;gap:8px}
+/* 32px round icon buttons: above the 24px WCAG 2.5.8 target minimum; icon #C9CDD3 on #212227 is ~10:1 */
+.ldr-ctl{width:32px;height:32px;padding:0;border-radius:50%;display:grid;place-items:center;color:var(--inverse-muted);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.24);cursor:pointer;transition:color .15s,border-color .15s,background .15s}
+.ldr-ctl svg{width:14px;height:14px;fill:currentColor;display:block}
+.ldr-ctl svg[hidden]{display:none}
+.ldr-ctl:hover:not(:disabled){color:#fff;border-color:#fff;background:rgba(255,255,255,.12)}
+.ldr-ctl:focus-visible{outline:3px solid #8FA4B8;outline-offset:2px;border-radius:50%}
+.ldr-ctl:disabled{opacity:.35;cursor:default}
+
+/* logo animation (from "Logo colouring loader – wave", caption removed) */
+.ldr{--size:68px;--grey:#4A4C54;--name-off:#7C808A;--sticker:#fff;position:relative;width:100%;aspect-ratio:520/240;overflow:hidden;color:#fff}
+.ldr .stage{position:absolute;left:0;top:0;width:520px;height:240px;transform-origin:0 0}
+.ldr .logo{position:absolute;top:40px;width:var(--size);height:var(--size);margin-left:calc(var(--size)/-2);border-radius:50%;will-change:transform}
+.ldr .grey,.ldr .col{position:absolute;inset:0;border-radius:50%}
+.ldr .grey{background:var(--grey);overflow:hidden}
+.ldr .grey img{width:100%;height:100%;filter:grayscale(1) contrast(.35);opacity:.22;mix-blend-mode:luminosity}
+.ldr .col{opacity:0;transform:scale(.6);box-shadow:0 0 0 3px var(--sticker),0 6px 14px rgba(0,0,0,.28);background:var(--sticker)}
+.ldr .col img{width:100%;height:100%;border-radius:50%}
+.ldr .lname{position:absolute;left:50%;bottom:calc(100% + 10px);transform:translateX(-50%);white-space:nowrap;font-size:12px;font-weight:700;color:var(--name-off);transition:color .5s}
+.ldr .logo.on .lname{color:#fff;transition:color .15s;animation:ldrName .45s cubic-bezier(.3,1.9,.5,1)}
+@keyframes ldrName{0%{transform:translateX(-50%) scale(.8)}100%{transform:translateX(-50%) scale(1)}}
+.ldr .logo.on .grey{opacity:0;transition:opacity .18s}
+.ldr .logo.on .col{opacity:1;transform:scale(1) rotate(var(--tilt,0deg));transition:opacity .12s,transform .45s cubic-bezier(.3,1.9,.5,1)}
+.ldr .logo.reset .grey{opacity:1;transition:opacity .5s}
+.ldr .logo.reset .col{opacity:0;transform:scale(.9);transition:opacity .5s,transform .5s}
+.ldr .spark{position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px;border-radius:50%;background:#FFD166;opacity:0;pointer-events:none}
+.ldr .logo.on .spark{animation:ldrSpark .5s ease-out both}
+@keyframes ldrSpark{0%{opacity:1;transform:rotate(var(--a)) translateY(-30px) scale(1)}100%{opacity:0;transform:rotate(var(--a)) translateY(-56px) scale(.3)}}
+.ldr .ground{position:absolute;left:16px;right:16px;top:230px;height:2px;border-radius:2px;background:rgba(255,255,255,.18)}
+.ldr .shadow{position:absolute;top:226px;left:0;width:34px;height:8px;margin-left:-17px;border-radius:50%;background:rgba(0,0,0,.35)}
+.ldr .runner{position:absolute;left:0;top:134px;width:72px;height:99px;margin-left:-36px;will-change:transform}
+.ldr .runner svg{display:block;width:100%;height:100%;overflow:visible;transform-origin:50% 50%;filter:drop-shadow(0 0 1px rgba(255,255,255,.45))}
+.ldr .leg,.ldr .arm,.ldr .hair-back{transform-box:fill-box}
+.ldr .leg{transform-origin:50% 6%}
+.ldr .arm{transform-origin:50% 10%}
+.ldr .hair-back{transform-origin:60% 0}
+.ldr .running .leg.a{animation:ldrSwing .34s ease-in-out infinite alternate}
+.ldr .running .leg.b{animation:ldrSwing .34s ease-in-out infinite alternate-reverse}
+.ldr .running .arm.a{animation:ldrArm .34s ease-in-out infinite alternate-reverse}
+.ldr .running .arm.b{animation:ldrArm .34s ease-in-out infinite alternate}
+.ldr .running .hair-back{animation:ldrHair .34s ease-in-out infinite alternate}
+.ldr .running .bob{animation:ldrBob .17s ease-in-out infinite alternate}
+@keyframes ldrSwing{from{transform:rotate(34deg)}to{transform:rotate(-34deg)}}
+@keyframes ldrArm{from{transform:rotate(40deg)}to{transform:rotate(-40deg)}}
+@keyframes ldrHair{from{transform:rotate(4deg)}to{transform:rotate(12deg)}}
+@keyframes ldrBob{from{transform:translateY(0)}to{transform:translateY(-2px)}}
+.ldr .jumping .leg.a{animation:none;transform:rotate(-48deg)}
+.ldr .jumping .leg.b{animation:none;transform:rotate(30deg)}
+.ldr .jumping .arm.a{animation:none;transform:rotate(38deg)}
+.ldr .jumping .arm.b{animation:none;transform:translate(9px,-25px) rotate(-172deg)}
+.ldr .jumping .hair-back{animation:none;transform:rotate(-4deg)}
+.ldr .jumping .bob{animation:none}
+
+/* projects */
+.projects{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.proj{border:1px solid var(--border);border-radius:10px;padding:24px 22px;display:grid;grid-template-rows:auto auto 1fr auto;gap:14px}
+.proj ul{margin:0;padding-left:18px;font-size:15px;line-height:1.55;display:grid;gap:6px;align-content:start}
+.proj .btn{justify-self:start;margin-top:10px}
+
+/* matcher */
+.matcher{display:grid;grid-template-columns:minmax(260px,300px) minmax(0,1fr);gap:24px;align-items:start}
+.needs{display:grid;gap:8px;position:sticky;top:16px}
+.need{width:100%;text-align:left;background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px 14px 16px 20px;cursor:pointer;color:var(--text);font:500 15px/1.4 var(--font);display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;transition:border-color .15s,background .15s}
+.need:hover{border-color:var(--text)}
+.need[aria-selected="true"]{border-color:var(--text);background:var(--bg-accent-soft);box-shadow:inset 4px 0 0 var(--text)}
+.pill{font-size:13px;font-weight:500;line-height:1.35;padding:4px 11px;border-radius:999px;white-space:nowrap;background:var(--bg-accent-soft);color:var(--text);border:1px solid #C9D3DD}
+.pill.partial{background:var(--bg-partial-soft);color:var(--partial);border-color:var(--border-partial)}
+.panel{border:1px solid var(--border);border-radius:12px;padding:28px;display:grid;gap:22px;min-height:560px}
+.panel-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.panel-head .titles{display:grid;gap:10px}
+.panel-head .label{font-size:13px}
+.panel-head h3{font-size:26px;line-height:1.15;max-width:30ch}
+.quoteline{font-size:15px;line-height:1.55;color:var(--muted);border-left:3px solid var(--border);padding-left:15px}
+.why{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+.why li{display:grid;grid-template-columns:148px 1fr;gap:12px;align-items:start;font-size:16px}
+.src{font-size:14px;font-weight:500;padding:4px 8px;border-radius:4px;background:var(--bg-subtle);border:1px solid var(--border);color:var(--muted);white-space:nowrap;text-align:center}
+figure{margin:0;display:grid;gap:8px}
+figure .frame{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+figcaption,.caption{font-size:13px;line-height:1.4;color:var(--muted)}
+.zoom{all:unset;cursor:zoom-in;display:block}
+.zoom:focus-visible{outline:3px solid var(--text);outline-offset:2px;border-radius:8px}
+.frame.crop img{width:100%;height:var(--h,290px);object-fit:cover;object-position:var(--pos,50% 0)}
+@media (max-width:520px){.frame.crop img{height:auto;max-height:var(--h,290px)}}
+.panel-foot{font-size:13px;color:var(--muted);border-top:1px solid var(--border);padding-top:14px}
+
+.embed{display:grid;gap:8px}
+.embed iframe{display:block;width:100%;height:640px;border:1px solid var(--border);border-radius:8px;background:#F0F4F8}
+.embed .poster{display:none}
+.embed .cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.embed .cap a{font-weight:500;color:var(--text)}
+@media (max-width:760px){.embed iframe{display:none}.embed .poster{display:block}}
+/* 0781 flow */
+.flow{background:var(--bg-subtle);border-radius:8px;padding:16px;display:grid;gap:12px}
+.flow .note{font-size:13px;color:var(--muted)}
+.steps{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin:0;padding:0;list-style:none}
+.steps li{background:#fff;border:1px solid var(--border);border-radius:6px;padding:8px 6px;text-align:center;font-size:13px;font-weight:500;line-height:1.3;display:grid;place-items:center}
+.findings{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+.finding{border-radius:6px;padding:10px 12px;border:1px solid;display:grid;gap:2px;font-size:13px;line-height:1.35}
+.finding b{font-size:15px}
+.finding.ok{background:var(--bg-accent-soft);border-color:var(--border-strong)}
+.finding.fix{background:var(--bg-partial-soft);border-color:var(--partial)}
+
+/* concept */
+.concept{border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.concept-bar{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;flex-wrap:wrap}
+.concept-body{padding:14px;display:grid;gap:10px;background:var(--bg-subtle)}
+.item{background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:grid;gap:8px}
+.item-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.item-top b{font-weight:600}
+.conf{font-size:13px;font-weight:500}
+.conf.lo{color:var(--partial)}
+.item p{font-size:14px;color:var(--muted)}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.acts button{font:600 13px var(--font);padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--text);cursor:pointer}
+.acts button:hover{border-color:var(--text)}
+.item[data-state="accepted"]{border-color:var(--text)}
+.item[data-state="dismissed"]{opacity:.55}
+.item .status{font-size:13px;font-weight:600}
+
+/* role map */
+.rolemap{border:1px solid var(--border);border-radius:12px;padding:24px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 32px}
+.rolemap h3{font-size:13px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.rolemap ul{margin:0;padding:0;list-style:none;display:grid;gap:12px}
+.rolemap li{border:1px solid var(--border);border-radius:8px;padding:16px;display:grid;gap:6px;font-size:14px;line-height:1.4}
+.rolemap li span{color:var(--muted)}
+.rolemap .cm li{background:var(--bg-accent-soft);border-color:var(--border-strong)}
+
+/* quotes */
+.quotes{display:grid;grid-template-columns:minmax(0,680fr) minmax(0,420fr);gap:20px}
+blockquote{margin:0;background:var(--bg-subtle);border-radius:10px;padding:24px;display:grid;gap:16px;align-content:space-between}
+blockquote p{font-size:21px;line-height:1.35;font-weight:500}
+blockquote.big p{font-size:26px}
+blockquote footer{font-size:14px;color:var(--muted)}
+.stack{display:grid;gap:20px}
+
+/* letter */
+.letter{display:grid;grid-template-columns:minmax(0,772fr) minmax(260px,300fr);gap:48px}
+.letter .body{display:grid;gap:16px;font-size:18px;align-content:start}
+.sig{font-size:28px;font-weight:700;line-height:1.2}
+.contact{border:1px solid var(--border);border-radius:10px;padding:22px;display:grid;gap:12px;align-content:start;align-self:start;font-size:15px}
+.contact .loc{color:var(--muted)}
+footer.page{padding:24px 0 40px;border-top:1px solid var(--border);font-size:13px;line-height:1.4;color:var(--muted)}
+
+/* lightbox */
+dialog{border:0;padding:0;background:transparent;max-width:96vw;max-height:94vh}
+dialog::backdrop{background:rgba(10,14,12,.82)}
+dialog img{max-height:88vh;width:auto;border-radius:6px;background:#fff}
+dialog .close{position:absolute;top:8px;right:8px}
+
+@media (prefers-reduced-motion:no-preference){
+  .panel > *{animation:rise .32s ease both}
+  @keyframes rise{from{transform:translateY(6px);opacity:.4}to{transform:none;opacity:1}}
+}
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;padding-top:32px}
+  .hero h1{order:-1}
+  .matcher{grid-template-columns:1fr}
+  .needs{position:static;display:flex;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory}
+  .need{min-width:240px;scroll-snap-align:start}
+  .projects,.rolemap,.quotes,.letter{grid-template-columns:1fr}
+  .steps{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media (max-width:520px){
+  .wrap{padding:0 16px}
+  .chapter{display:block}
+  .panel{padding:20px;min-height:0}
+  .panel-head{flex-direction:column-reverse;gap:12px}
+  .panel-head h3{font-size:22px}
+  .why li{grid-template-columns:1fr;gap:6px}
+  .src{justify-self:start}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  blockquote.big p{font-size:21px}
+  .top nav{gap:14px}
+}
+</style>
+</head>
+<body>
+<div class="herowrap"><div class="wrap">
+<header class="top">
+  <span class="who">Qian Chen</span>
+  <nav aria-label="Page sections">
+    <a href="#work">My work</a>
+    <a href="#match">The match</a>
+    <a href="#letter">Cover letter</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="anim-col">
+    <div class="ldr" id="ldr" role="img" aria-label="Animation: a small illustrated Qian runs past four grey logos labelled Mentor Collective, USDA, Veterans Affairs and Think of Us, and jumps to tap each one into full colour. At Think of Us she stops, turns to face you and waves, then stays there waving hello.">
+      <div class="stage" id="ldrStage" aria-hidden="true">{{STAGE}}</div>
+    </div>
+    <div class="ldr-ctls" role="group" aria-label="Animation controls">
+      <button class="ldr-ctl" id="ldrPlay" type="button" aria-label="Play animation" title="Play">
+        <svg class="i-play" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6l7.6-4.8z"/></svg>
+        <svg class="i-replay" viewBox="0 0 16 16" aria-hidden="true" focusable="false" hidden><path d="M8 2.6V.6L4.4 3.6 8 6.6v-2a3.6 3.6 0 1 1-3.6 3.6H2.6A5.4 5.4 0 1 0 8 2.6z"/></svg>
+      </button>
+      <button class="ldr-ctl" id="ldrPause" type="button" aria-label="Pause animation" title="Pause">
+        <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4.4 3h2.6v10H4.4zM9 3h2.6v10H9z"/></svg>
+      </button>
+    </div>
+  </div>
+  <aside class="intake" aria-label="Application summary">
+    <span class="label">Application for Think of Us</span>
+    <dl>
+      <dt>Who</dt><dd>Qian Chen</dd>
+      <dt>Role</dt><dd class="role">Lead Product Designer</dd>
+    </dl>
+    <div class="btns">
+      <a class="btn solid" href="https://qcdesigns.me">Portfolio</a>
+      <a class="btn" href="https://www.linkedin.com/in/qcdesigns/">LinkedIn</a>
+    </div>
+    <p class="pw">Portfolio password: UX!2023</p>
+  </aside>
+  <h1>Design for systemic change</h1>
+</div>
+</div></div>
+
+<main class="wrap">
+<section id="work">
+  <div class="chapter">My work</div>
+  <div class="sec-head"><h2>🏛️ Three public-interest systems</h2></div>
+  <div class="projects">
+    <article class="proj">
+      <span class="label">VA.gov · Disability benefits</span>
+      <h3>Trauma-informed redesign of the mental health claim form</h3>
+      <ul>
+        <li>Co-ran concept testing of VA Form 21-0781 with 9 Veterans, using trauma-informed protocols</li>
+        <li>Found that "optional" rarely feels optional when benefits are at stake</li>
+        <li>Used Github Co-pilot AI to identify data inconsistencies.</li>
+      </ul>
+      <a class="btn solid" href="{{VA_DECK}}"{{VA_DECK_ATTR}}>Research deck</a>
+    </article>
+    <article class="proj">
+      <span class="label">Mentor Collective · Higher ed</span>
+      <h3>Helping students succeed via 180,000+ mentorships</h3>
+      <ul>
+        <li>Solving the problem</li>
+        <li>Journey maps for mentors and mentees, including what happens when one side goes silent</li>
+        <li>100+ tasks and trainings shipped, rated 4.8/5 by 5,000+ participants</li>
+      </ul>
+      <a class="btn solid" href="https://qcdesigns.me/p/022d282b">Full case study</a>
+    </article>
+    <article class="proj">
+      <span class="label">farmers.gov · USDA</span>
+      <h3>Preventing another Dust Bowl via conservation support</h3>
+      <ul>
+        <li>Weaved</li>
+        <li>Interviewed field and programs staff to learn why producers arrived unprepared</li>
+        <li>Proposed a step-by-step tool and a simpler navigation: Fund, Manage, Conserve</li>
+      </ul>
+      <a class="btn solid" href="https://qcdesigns.me/p/NRCS-USDA">Full case study</a>
+    </article>
+  </div>
+</section>
+
+<section id="match">
+  <div class="chapter">Why I'm a fit</div>
+  <div class="sec-head">
+    <h2>🧭 Your requirements, matched to my evidence</h2>
+    <p class="lede">I set this up like the support plans a ConnectMe responder reviews. Each match shows its reasons, its source, and its limits. Where my evidence is partial, I say so and show how I'd close the gap.</p>
+  </div>
+  <div class="matcher">
+    <div class="needs" role="tablist" aria-label="Think of Us requirements" aria-orientation="vertical" id="needs"></div>
+    <div class="panel" role="tabpanel" id="panel" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="carries">
+  <div class="sec-head">
+    <h2>🔁 I've worked in systems shaped like ConnectMe</h2>
+    <p class="lede">Each of these had people asking for help, staff who make it happen, an organization accountable for outcomes, and a system matching one to the other.</p>
+  </div>
+  <div class="rolemap">
+    <div><h3>Mentor Collective</h3><ul>
+      <li>Mentees<span>first-year students, often first-gen</span></li>
+      <li>Program managers<span>configure and deliver support content</span></li>
+      <li>Matching algorithm<span>pairs mentors and mentees</span></li>
+      <li>Partner institutions<span>180+ colleges tracking outcomes</span></li>
+    </ul></div>
+    <div><h3>VA.gov and farmers.gov</h3><ul>
+      <li>Veterans filing claims<span>including PTSD and MST-related</span></li>
+      <li>Conservation staff<span>prepare producers for visits (USDA)</span></li>
+      <li>Form logic<span>optional sections, evidence routing</span></li>
+      <li>Federal programs<span>VA and USDA, accountable for outcomes</span></li>
+    </ul></div>
+    <div class="cm"><h3>ConnectMe</h3><ul>
+      <li>Help-seekers<span>youth, families, kin caregivers</span></li>
+      <li>Community Responders<span>work cases in the workbench</span></li>
+      <li>AI drafts and matching<span>assessments, resources, urgency flags</span></li>
+      <li>State deployments<span>multiple states, program leadership</span></li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="voices">
+  <div class="sec-head"><h2>💬 From people I've worked with</h2></div>
+  <div class="quotes">
+    <blockquote class="big">
+      <p>"I really appreciate your perceptive sense of the broader challenges and gaps in terms of program and project leadership. To design the team and to design the program is to create the conditions for better outcomes!"</p>
+      <footer>Human-centered design teammate, VA.gov Disability Benefits team</footer>
+    </blockquote>
+    <div class="stack">
+      <blockquote>
+        <p>“Qian’s work in Figma was really comprehensive and help us stay aligned and process the potential impact of changes along the way.”</p>
+        <footer>Sprint retro kudos, VA.gov team</footer>
+      </blockquote>
+      <blockquote>
+        <p>"This new flow works seamlessly."</p>
+        <footer>Program manager, Mentor Collective</footer>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<section id="letter">
+  <div class="letter">
+    <div class="body">
+      <h2>✉️ A note to the team</h2>
+      <p>Dear Think of Us team,</p>
+      <p>TBA</p>
+      <p>Thank you for reading. I'd welcome the chance to talk.</p>
+      <p class="sig">Qian Chen</p>
+    </div>
+    <aside class="contact" aria-label="Contact">
+      <span class="label">Contact</span>
+      <a href="mailto:hello@qcdesigns.me">hello@qcdesigns.me</a>
+      <a href="https://qcdesigns.me">qcdesigns.me</a>
+      <span class="loc">Baltimore, MD · hybrid in Washington, DC</span>
+    </aside>
+  </div>
+</section>
+
+<footer class="page">Project details summarize my own work and team research reports. Screens and maps come from my own case studies. The concept sketch in the match section was made for this application and is not a Think of Us screen.</footer>
+</main>
+
+<dialog id="lb" aria-label="Enlarged image">
+  <button class="btn solid close" id="lbClose" type="button">Close</button>
+  <img id="lbImg" alt="">
+</dialog>
+
+<template id="flow0781">
+  <figure>
+    <div class="flow">
+      <p class="note">VA Form 21-0781 Mental Health flow tested in a high-fidelity prototype, 90-minute sessions</p>
+      <ol class="steps" aria-label="Form steps">
+        <li>0781 choice</li><li>Traumatic events</li><li>Behavioral changes</li><li>0781 review</li><li>Medical records</li><li>Supporting docs</li><li>Review &amp; submit</li>
+      </ol>
+      <div class="findings">
+        <div class="finding ok"><b>8 of 9</b>understood their options at the choice page</div>
+        <div class="finding fix"><b>None</b>found how to delete a police report in an event</div>
+        <div class="finding fix"><b>7 of 9</b>saw skipping a section as unsafe</div>
+        <div class="finding fix"><b>6 of 9</b>completed opt-out from the 0781 review</div>
+        <div class="finding fix"><b>4 of 6</b>completed opt-out at final review</div>
+      </div>
+    </div>
+    <figcaption>Findings from round 2 concept testing, March 2025. Blue worked as designed, orange needed redesign.</figcaption>
+  </figure>
+</template>
+
+<template id="concept">
+  <figure>
+    <div class="concept">
+      <div class="concept-bar"><span class="label">Concept sketch · Draft support plan</span><span style="color:var(--muted)">Prepared by AI · A responder reviews before the family sees it</span></div>
+      <div class="concept-body">
+        <div class="item" data-state="open">
+          <div class="item-top"><b>Emergency rental assistance</b><span class="conf">Strong match</span></div>
+          <p>Why: caller mentioned an eviction notice due Friday. County program has same-week funds.</p>
+          <div class="acts"><button type="button" data-act="accepted">Accept</button><button type="button" data-act="edit">Edit</button><button type="button" data-act="dismissed">Dismiss</button></div>
+        </div>
+        <div class="item" data-state="open">
+          <div class="item-top"><b>Kinship navigator program</b><span class="conf lo">Unsure: needs your call</span></div>
+          <p>Why: caregiver may be a grandparent, but the call notes don't confirm it. Ask before adding.</p>
+          <div class="acts"><button type="button" data-act="accepted">Accept</button><button type="button" data-act="edit">Edit</button><button type="button" data-act="dismissed">Dismiss</button></div>
+        </div>
+      </div>
+    </div>
+    <figcaption>Every suggestion shows its reason and its confidence, and nothing reaches a family until a person decides. Example data only.</figcaption>
+  </figure>
+</template>
+
+<script type="application/json" id="needsData">{{NEEDS}}</script>
+<script>
+/* ---------- matcher ---------- */
+(function(){
+  var needs=JSON.parse(document.getElementById('needsData').textContent);
+  var esc=function(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var list=document.getElementById('needs'), panel=document.getElementById('panel');
+  function fig(im){
+    return '<figure><button class="zoom" type="button" data-src="'+esc(im.src)+'" aria-label="Enlarge: '+esc(im.alt)+'"><div class="frame'+(im.crop?' crop':'')+'"><img src="'+esc(im.src)+'" alt="'+esc(im.alt)+'" loading="lazy"></div></button><figcaption>'+esc(im.cap)+'</figcaption></figure>';
+  }
+  function embed(e){
+    if(!e) return '';
+    return '<figure class="embed"><iframe src="'+esc(e.src)+'" title="'+esc(e.title)+'" loading="lazy"></iframe>'+
+      '<div class="poster frame"><img src="'+esc(e.poster)+'" alt="'+esc(e.posterAlt)+'" loading="lazy"></div>'+
+      '<figcaption class="cap"><span>'+esc(e.cap)+'</span><a href="'+esc(e.src)+'" target="_blank" rel="noopener">Open full screen<span class="sr"> (opens in a new tab)</span> ↗</a></figcaption></figure>';
+  }
+  function btns(b){
+    if(!b||!b.length) return '';
+    return '<div class="btns">'+b.map(function(x,i){return '<a class="btn'+(i===0?' solid':'')+'" href="'+esc(x.href)+'"'+(x.todo?' aria-disabled="true" title="Link to be added"':'')+'>'+esc(x.label)+'</a>';}).join('')+'</div>';
+  }
+  needs.forEach(function(n,i){
+    var b=document.createElement('button');
+    b.className='need'; b.type='button'; b.id='tab-'+i; b.setAttribute('role','tab'); b.setAttribute('aria-controls','panel');
+    b.innerHTML='<span>'+esc(n.name)+'</span><span class="pill'+(n.partial?' partial':'')+'">'+esc(n.listPill)+'</span>';
+    b.addEventListener('click',function(){select(i);});
+    b.addEventListener('keydown',function(e){
+      if(e.key==='ArrowDown'||e.key==='ArrowRight'){e.preventDefault();select((i+1)%needs.length,true);}
+      if(e.key==='ArrowUp'||e.key==='ArrowLeft'){e.preventDefault();select((i-1+needs.length)%needs.length,true);}
+    });
+    list.appendChild(b);
+  });
+  function select(i,focus){
+    var n=needs[i];
+    [].forEach.call(list.children,function(b,j){b.setAttribute('aria-selected',j===i?'true':'false');b.tabIndex=j===i?0:-1;});
+    if(focus){list.children[i].focus();list.children[i].scrollIntoView({block:'nearest',inline:'nearest'});}
+    panel.setAttribute('aria-labelledby','tab-'+i);
+    var tpl=n.template?document.getElementById(n.template).innerHTML:'';
+    panel.innerHTML=
+      '<div class="panel-head"><div class="titles"><span class="label">Your requirement · '+esc(n.name)+'</span><h3>'+esc(n.title)+'</h3></div>'+
+      '<span class="pill'+(n.partial?' partial':'')+'">'+esc(n.panelPill)+'</span></div>'+
+      btns(n.buttons)+
+      '<p class="quoteline">From the posting: "'+esc(n.quote)+'"</p>'+
+      '<div style="display:grid;gap:12px"><span class="label">Why this matches</span><ul class="why">'+
+        n.why.map(function(w){return '<li><span class="src">'+esc(w[0])+'</span><span>'+esc(w[1])+'</span></li>';}).join('')+'</ul></div>'+
+      embed(n.embed)+(n.images||[]).map(fig).join('')+tpl+
+      '<p class="panel-foot">Match '+(i+1)+' of '+needs.length+'. Use the arrow keys or pick another requirement.</p>';
+  }
+  select(0);
+  panel.addEventListener('click',function(e){
+    var a=e.target.closest('[data-act]');
+    if(a){var item=a.closest('.item'),k=a.dataset.act;item.dataset.state=k==='edit'?'open':k;
+      var s=item.querySelector('.status');if(!s){s=document.createElement('span');s.className='status';item.appendChild(s);}
+      s.textContent=k==='accepted'?'Added to the plan by the responder.':k==='dismissed'?'Dismissed by the responder. Logged so the team can review AI quality.':'Opened for editing. The responder rewrites it in their own words.';return;}
+    var d=e.target.closest('a[aria-disabled="true"]'); if(d) e.preventDefault();
+  });
+  document.addEventListener('click',function(e){
+    var d=e.target.closest('a[aria-disabled="true"]'); if(d){e.preventDefault();return;}
+    var z=e.target.closest('.zoom'); if(!z) return;
+    var lb=document.getElementById('lb'),im=document.getElementById('lbImg');
+    im.src=z.dataset.src; im.alt=z.querySelector('img').alt; if(lb.showModal) lb.showModal();
+  });
+  document.getElementById('lbClose').addEventListener('click',function(){document.getElementById('lb').close();});
+  document.getElementById('lb').addEventListener('click',function(e){if(e.target.id==='lb')e.target.close();});
+})();
+
+/* ---------- hero animation ---------- */
+(function(){
+  var LOGOS={{LOGOS}};
+  var W=520, LOGO_X=[80,200,320,440], JUMP=34, JUMP_T=0.52, SPEED=132, START=-50;
+  var hitT=LOGO_X.map(function(x){return (x-8-START)/SPEED;});
+  var LAND=hitT[3]+JUMP_T/2, LAND_X=START+LAND*SPEED, DEC=0.14, STOP_X=LAND_X+SPEED*DEC/2;
+  var TURN_D=0.32, TURN1=LAND+DEC+0.1, WAVE0=TURN1+TURN_D, WAVE_D=3.6, END=WAVE0+WAVE_D;
+  var root=document.getElementById('ldr'), stage=document.getElementById('ldrStage');
+  [].forEach.call(stage.querySelectorAll('img[data-l]'),function(im){im.src=LOGOS[im.dataset.l];});
+  var runner=document.getElementById('ldrRunner'), shadow=document.getElementById('ldrShadow');
+  var svg=runner.querySelector('svg'), side=runner.querySelector('.side'), front=runner.querySelector('.front'), arm=document.getElementById('ldrArm');
+  var logos=[].slice.call(stage.querySelectorAll('.logo'));
+  logos.forEach(function(l){for(var i=0;i<6;i++){var s=document.createElement('i');s.className='spark';s.style.setProperty('--a',(i*60+15)+'deg');l.appendChild(s);}});
+  function fit(){stage.style.transform='scale('+root.clientWidth/W+')';}
+  fit(); addEventListener('resize',fit);
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // plays once on its own; Play resumes or replays, Pause stops it where it is
+  var wanted=!reduce, visible=false, running=false, done=false, t0=null, tP=0, raf;
+  var playBtn=document.getElementById('ldrPlay'), pauseBtn=document.getElementById('ldrPause');
+  function setLogo(l,on){l.classList.toggle('on',on);l.classList.remove('reset');}
+  function waveAngle(t){
+    if(t<WAVE0)return 0;
+    var up=Math.min((t-WAVE0)/.18,1); up=up*up*(3-2*up);
+    var amp=18*Math.max(0,Math.min(1,(END-t)/0.6)); // the wave slows and settles with her hand up
+    return up*(-146+amp*Math.sin((t-WAVE0)/0.42*2*Math.PI));
+  }
+  function draw(x,y,mode,sx,isFront,a){
+    runner.style.transform='translate('+x.toFixed(2)+'px,'+y.toFixed(2)+'px)';
+    runner.className='runner'+(mode?' '+mode:'');
+    svg.style.transform='scaleX('+sx.toFixed(3)+')';
+    side.style.display=isFront?'none':''; front.style.display=isFront?'':'none';
+    arm.setAttribute('transform','rotate('+a.toFixed(2)+' 51 52)');
+    var s=1+y/90; shadow.style.transform='translate('+x.toFixed(2)+'px,0) scale('+s.toFixed(3)+')'; shadow.style.opacity=s;
+  }
+  function render(t){
+    var x,y=0,mode='',sx=1,isFront=false,jumping=false;
+    if(t<LAND)x=START+t*SPEED; else if(t<LAND+DEC){var d=t-LAND;x=LAND_X+SPEED*(d-d*d/(2*DEC));} else x=STOP_X;
+    for(var i=0;i<hitT.length;i++){
+      var p=(t-(hitT[i]-JUMP_T/2))/JUMP_T; if(p>0&&p<1){y=-JUMP*4*p*(1-p);jumping=true;}
+      var since=t-hitT[i]; setLogo(logos[i],since>=0);
+      var k=since>=0&&since<.28?Math.sin(since/.28*Math.PI)*-9:0; logos[i].style.transform='translateY('+k.toFixed(2)+'px)';
+    }
+    if(jumping)mode='jumping'; else if(t<LAND+DEC)mode='running';
+    if(t>=TURN1&&t<WAVE0){var q=(t-TURN1)/TURN_D;sx=Math.max(Math.abs(Math.cos(Math.PI*q)),.04);isFront=q>=.5;y=-6*Math.sin(Math.PI*q);}
+    else if(t>=WAVE0)isFront=true;
+    draw(x,y,mode,sx,isFront,waveAngle(t));
+  }
+  function frame(now){
+    if(t0===null)t0=now-tP*1000;
+    var t=Math.min((now-t0)/1000,END); tP=t;
+    render(t);
+    if(t>=END){done=true;wanted=false;running=false;ui();return;}
+    if(running)raf=requestAnimationFrame(frame);
+  }
+  function sync(){
+    var go=wanted&&visible&&!done;
+    if(go&&!running){running=true;t0=null;raf=requestAnimationFrame(frame);}
+    if(!go&&running){running=false;cancelAnimationFrame(raf);runner.classList.remove('running','jumping');}
+    ui();
+  }
+  function ui(){
+    var playing=wanted&&!done;
+    playBtn.disabled=playing; pauseBtn.disabled=!playing;
+    playBtn.querySelector('.i-play').toggleAttribute('hidden',done); playBtn.querySelector('.i-replay').toggleAttribute('hidden',!done); playBtn.title=done?'Replay':'Play';
+    playBtn.setAttribute('aria-label',(done?'Replay':'Play')+' animation');
+  }
+  playBtn.addEventListener('click',function(){
+    if(done){done=false;tP=0;}
+    wanted=true; sync(); pauseBtn.focus();
+  });
+  pauseBtn.addEventListener('click',function(){wanted=false; sync(); playBtn.focus();});
+  if('IntersectionObserver' in window) new IntersectionObserver(function(es){visible=es[0].isIntersecting;sync();}).observe(root);
+  else visible=true;
+  if(reduce){tP=END;done=true;render(END);} else render(0);
+  sync();
+  window.__seek=function(t){wanted=false;sync();tP=t;render(t);};
+})();
+</script>
+</body>
+</html>
